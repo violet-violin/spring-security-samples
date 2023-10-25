@@ -1,5 +1,6 @@
 package org.javaboy.formlogin;
 
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class HelloController {
+    FormLoginConfigurer formLoginConfigurer;
     @GetMapping("/hello")
     public String hello() {
         return "hello";
