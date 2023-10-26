@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/js/**", "/css/**", "/images/**");
     }
 
+    // 前后端分离的情况下，登录成功/注销后返回json
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -64,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler((req, resp, authentication) -> {
                     Object principal = authentication.getPrincipal();
                     resp.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = resp.getWriter();
+                    PrintWriter out = resp.getWriter();  // 利用response对象的输出流返回json数据
                     out.write(new ObjectMapper().writeValueAsString(principal));
                     out.flush();
                     out.close();
@@ -99,4 +100,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         }
                 );
     }
+}
+
+class DaoAuthenticationProviderOwn extends DaoAuthenticationProvider {
+
+    protected boolean hideUserNotFoundExceptions = false;
+
 }
