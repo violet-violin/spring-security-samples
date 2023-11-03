@@ -17,6 +17,7 @@ class WithjpaApplicationTests {
 
     @Autowired
     UserDao userDao;
+    // 添加测试数据
     @Test
     void contextLoads() {
         User u1 = new User();
@@ -26,6 +27,7 @@ class WithjpaApplicationTests {
         u1.setAccountNonLocked(true);
         u1.setCredentialsNonExpired(true);
         u1.setEnabled(true);
+
         List<Role> rs1 = new ArrayList<>();
         Role r1 = new Role();
         r1.setName("ROLE_admin");
@@ -33,6 +35,7 @@ class WithjpaApplicationTests {
         rs1.add(r1);
         u1.setRoles(rs1);
         userDao.save(u1);
+
         User u2 = new User();
         u2.setUsername("江南一点雨");
         u2.setPassword("123");

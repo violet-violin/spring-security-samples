@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return hierarchy;
     }
 
+    // 通过如下方式配置用户信息，使用自定义的 UserDetailsService
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService);
