@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource;
 
+    // 使用数据库中的用户进行认证
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
