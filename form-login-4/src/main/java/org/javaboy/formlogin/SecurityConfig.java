@@ -44,13 +44,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return NoOpPasswordEncoder.getInstance();
     }
 
+    // 角色继承，配置角色继承有两种方式，一种是通过配置文件配置，另一种是通过代码配置，这里我们演示通过代码配置角色继承。
+    // 配置admin > user，意思是admin拥有user的所有权限，这样我们在配置/admin/**的时候，就不需要再配置/user/**了。
     @Bean
     RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
         hierarchy.setHierarchy("ROLE_admin > ROLE_user");
         return hierarchy;
     }
-
+//    两种基于内存定义用户的方法，大家任选一个。
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.inMemoryAuthentication()
@@ -62,13 +64,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .roles("user");
 //    }
 
-
+// 两种基于内存定义用户的方法之二，大家任选一个。
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("javaboy").password("123").roles("admin").build());
-        manager.createUser(User.withUsername("江南一点雨").password("123").roles("user").build());
+        manager.createUser(User.withUsername("liy").password("123").roles("user").build());
         return manager;
     }
 
@@ -80,9 +82,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin/**").hasRole("admin")
-                .antMatchers("/user/**").hasRole("user")
-                .anyRequest().authenticated()
+                .antMatchers("/admin/**").hasRole("admin") // 和 Shiro 类似，Spring Security 在匹配的时候也是按照从上往下的顺序来匹配，一旦匹配到了就不继续匹配了，所以拦截规则的顺序不能写错。
+                .antMatchers("/user/**").hasRole("user") // user/**下的所有请求都需要user角色
+                .anyRequest().authenticated()  // 任何请求都需要认证
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/doLogin")
